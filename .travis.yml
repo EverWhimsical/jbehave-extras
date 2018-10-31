@@ -1,0 +1,16 @@
+language: java
+before_deploy:
+  - mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
+  - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep -v '\[')
+deploy:
+  provider: releases
+    api_key:
+      secure: VL2ZrHXLEPkOUp5JBL1knomWi/ot9vNv96XaEmHhb9kfsUrAOqx5zoWRsg1l+DRws0LFHRiBsSvrMfu+c5NV8w4hqNEkabN1KILPBD9JxWJp4n+0zv/lK5IjbMhL35S7ABG4ntKJZYwR6eBMvXzmyP33FfyUkS4WlDhfO6GKsM10bmaUQI2v1yxGzFpUiKNw9ueAyvxjV5+NTa0p0t2XEUuYsvafn1HoP5sZZjuVuq88rTvH2X/95sFNriM7cao+My5ObJKpz9yQkizxVoGnXGYHCy/2U4oIk+gdDiDmcFlpb8QUABKfHqrz2UKvvbwkgV0hDUIlxcVoNp+czE1nXSuDIf3m+1rf0bZsKTMYEMd7eLZY+UzzQKjaroHRZ4fWkFLK5UTCwXG+Gpn3yDbWK2b0hgRRrafpAvhlw3Jbf/JwwBlSaHvtq+YS7RYoFt4to555QXrcFcOaG7JbW/G4kYDxvQTXGaMrXgkoHovXzkErvkgvAguTc/FtXEg9Bt1fOi3M5bHiJLEYo7eEluKCrLjy+k22ui+Ik/J3NygMGG8nBs+eGhGx7JnNxs6yQ2T5fXA25CbfJxtWS9WPBDYwul/+PSuZmpsXF9kaMBQ7JRK7y8fQfx6hKCUCS98ecuVizTzuIOr4s7FH3eUkuLsAck1MLxSnlYH32m3ov64BE30=
+    file:
+      - target/jbehave-extras-$project_version.jar
+      - target/jbehave-extras-$project_version-javadoc.jar
+      - target/jbehave-extras-$project_version-sources.jar
+    skip_cleanup: true
+    on:
+      repo: EverWhimsical/jbehave-extras
+    name: $project_version
