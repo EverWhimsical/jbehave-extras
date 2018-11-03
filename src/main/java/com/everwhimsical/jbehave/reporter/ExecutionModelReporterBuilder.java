@@ -4,11 +4,11 @@ import org.jbehave.core.reporters.StoryReporter;
 import org.jbehave.core.reporters.StoryReporterBuilder;
 
 /**
- * Extension of {@link StoryReporter}. <br /> Usage: <br />
+ * Extension of {@link StoryReporter}. <br> Usage: <br>
  * <pre>
  * public Configuration configuration() {
  *      return new MostUsefulConfiguration()
- *      .useStoryPathResolver(embeddableClass -> "com/everwhimsical/jbehave/Simple.story")
+ *      .useStoryPathResolver(embeddableClass -&gt; "com/everwhimsical/jbehave/Simple.story")
  *      .useStoryReporterBuilder(
  *      new ExecutionModelReporterBuilder().withDefaultFormats().withFormats(Format.CONSOLE));
  * }
