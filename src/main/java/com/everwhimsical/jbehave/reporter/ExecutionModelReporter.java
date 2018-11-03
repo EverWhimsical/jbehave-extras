@@ -7,11 +7,11 @@ import org.jbehave.core.model.Story;
 import org.jbehave.core.reporters.DelegatingStoryReporter;
 import org.jbehave.core.reporters.StoryReporter;
 
-public class ExecutionModelReporter extends DelegatingStoryReporter {
+class ExecutionModelReporter extends DelegatingStoryReporter {
 
     private StoryReporter delegate;
 
-    public ExecutionModelReporter(StoryReporter delegate) {
+    ExecutionModelReporter(StoryReporter delegate) {
         this.delegate = delegate;
     }
 

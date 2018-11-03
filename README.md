@@ -5,7 +5,7 @@
 Simple utility classes to gather information about your JBehave project and execution.
 
 ## JBehaveStepScanner
-Easily get all steps and duplicate steps in your project by using [JBehaveStepScanner](jbehave-extras/src/main/java/com/everwhimsical/jbehave/step/JBehaveStepScanner.java)
+Easily get all steps and duplicate steps in your project by using [JBehaveStepScanner](src/main/java/com/everwhimsical/jbehave/step/JBehaveStepScanner.java)
 
 Using the result list, it can be used to fail the execution before picking up stories if duplicate steps are found.
 ```
@@ -35,9 +35,9 @@ Or we can just print all the steps information.
 
 
 ## JBehaveExecution
-Get information about the current Story, Scenario, Step, Examples in a thread-safe manner using [JBehaveExecution](jbehave-extras/src/main/java/com/everwhimsical/jbehave/execution/JBehaveExecution.java)
+Get information about the current Story, Scenario, Step, Examples in a thread-safe manner using [JBehaveExecution](src/main/java/com/everwhimsical/jbehave/execution/JBehaveExecution.java)
 
-Add the [ExecutionModelReporterBuilder](jbehave-extras/src/main/java/com/everwhimsical/jbehave/reporter/ExecutionModelReporterBuilder.java) to your configuration as below and use the methods in JBehaveExecution.
+Add the [ExecutionModelReporterBuilder](src/main/java/com/everwhimsical/jbehave/reporter/ExecutionModelReporterBuilder.java) to your configuration as below and use the methods in JBehaveExecution.
 ```
     @Override
     public Configuration configuration() {

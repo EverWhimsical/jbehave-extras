@@ -2,6 +2,9 @@ package com.everwhimsical.jbehave.step;
 
 import java.util.Objects;
 
+/**
+ * Step Information model.
+ */
 public class JBehaveStepInfo {
 
     private String annotation;
@@ -17,38 +20,64 @@ public class JBehaveStepInfo {
         this.methodName = methodName;
     }
 
+    /**
+     * Get the Annotation as String
+     *
+     * @return {@link org.jbehave.core.annotations.Given}, {@link org.jbehave.core.annotations.When},
+     * {@link org.jbehave.core.annotations.Then} value
+     */
     public String getAnnotation() {
         return annotation;
     }
 
-    public void setAnnotation(String annotation) {
+    void setAnnotation(String annotation) {
         this.annotation = annotation;
     }
 
+    /**
+     * Get the step name.
+     *
+     * @return Step name as String.
+     */
     public String getStep() {
         return step;
     }
 
-    public void setStep(String step) {
+    void setStep(String step) {
         this.step = step;
     }
 
+    /**
+     * Get the qualified class name
+     *
+     * @return class name as String.
+     */
     public String getClassName() {
         return className;
     }
 
-    public void setClassName(String className) {
+    void setClassName(String className) {
         this.className = className;
     }
 
+    /**
+     * Get the method name.
+     *
+     * @return method name as String.
+     */
     public String getMethodName() {
         return methodName;
     }
 
-    public void setMethodName(String methodName) {
+    void setMethodName(String methodName) {
         this.methodName = methodName;
     }
 
+    /**
+     * Get step name with annotation.
+     *
+     * @return step name.
+     */
     public String getAnnotatedStep() {
         return annotation + " " + step;
     }
