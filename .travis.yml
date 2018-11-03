@@ -26,7 +26,6 @@ deploy:
   skip_cleanup: true
   on:
     repo: EverWhimsical/jbehave-extras
-    tags: true
   name: JBehave Extras - $project_version
   body: Automatic JBehave Extras development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
   prerelease: true
