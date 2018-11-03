@@ -13,14 +13,14 @@ import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 
 /**
- * Utility class to find all steps and duplicate steps.<br /><br /> All Steps:
+ * Utility class to find all steps and duplicate steps.<br><br> All Steps:
  * <pre>
  *
  * &#064;org.junit.Before
  * public void verifySteps() {
  *      JBehaveStepScanner jBehaveStepScanner = new JBehaveStepScanner(
  *      "com.everwhimsical.jbehave.step.classes.clean");
- *      List<JBehaveStepInfo> allSteps = jBehaveStepScanner.getAllSteps();
+ *      List-&lt;JBehaveStepInfo-&gt; allSteps = jBehaveStepScanner.getAllSteps();
  *      allSteps.forEach(System.out::println);
  * }
  * </pre>
@@ -31,8 +31,8 @@ import org.reflections.scanners.MethodAnnotationsScanner;
  *      JBehaveStepScanner jBehaveStepScanner = new JBehaveStepScanner(
  *      "com.everwhimsical.jbehave.step.classes.clean",
  *      "com.everwhimsical.jbehave.step.classes.duplicate");
- *      List<JBehaveStepInfo> duplicateSteps = jBehaveStepScanner.getDuplicateSteps();
- *      if (duplicateSteps.size() > 0) {
+ *      List-&lt;JBehaveStepInfo-&gt; duplicateSteps = jBehaveStepScanner.getDuplicateSteps();
+ *      if (duplicateSteps.size() -&gt; 0) {
  *          Assert.fail("Duplicate steps found");
  *      }
  * }
