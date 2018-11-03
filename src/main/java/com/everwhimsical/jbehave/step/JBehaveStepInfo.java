@@ -1,4 +1,4 @@
-package com.everwhimsical.jbehave;
+package com.everwhimsical.jbehave.step;
 
 import java.util.Objects;
 
