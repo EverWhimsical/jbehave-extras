@@ -1,5 +1,11 @@
 language: java
 
+# safelist
+branches:
+  only:
+  - master
+  - stable
+
 install:
   mvn install -Dgpg.skip -B -V
 

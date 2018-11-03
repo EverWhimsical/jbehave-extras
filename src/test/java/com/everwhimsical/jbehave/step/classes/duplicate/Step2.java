@@ -1,4 +1,4 @@
-package com.everwhimsical.jbehave.steps.duplicate;
+package com.everwhimsical.jbehave.step.classes.duplicate;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
