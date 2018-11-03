@@ -2,6 +2,7 @@ package com.everwhimsical.jbehave.step.classes.clean;
 
 import com.everwhimsical.jbehave.execution.JBehaveExecution;
 import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
@@ -47,7 +48,7 @@ public class Step1 {
     }
 
     @Then("I print <symbol>")
-    public void then3(String symbol) {
+    public void then3(@Named("symbol") String symbol) {
         printMethodName();
         System.out.println(symbol);
     }
