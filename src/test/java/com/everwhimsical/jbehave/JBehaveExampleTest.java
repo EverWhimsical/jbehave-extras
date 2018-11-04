@@ -2,6 +2,7 @@ package com.everwhimsical.jbehave;
 
 import com.everwhimsical.jbehave.execution.ExecutionModelReporter;
 import com.everwhimsical.jbehave.execution.JBehaveExecution;
+import com.everwhimsical.jbehave.model.About;
 import com.everwhimsical.jbehave.step.classes.clean.Step1;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,6 +23,9 @@ public class JBehaveExampleTest extends JUnitStory {
     @Before
     public void setup() {
         JBehaveExecution.startExecution();
+        About about = About.generateAbout();
+        about.addGitInformation();
+        JBehaveExecution.getExecution().setAbout(about);
     }
 
     @After
