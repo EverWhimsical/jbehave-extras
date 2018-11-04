@@ -8,17 +8,14 @@ import org.jbehave.core.annotations.When;
 
 public class Step1 {
 
-    void printMethodName() {
+    private void printMethodName() {
         System.out.println("Method: " + Thread.currentThread().getStackTrace()[2].getMethodName());
     }
 
     @Given("I open Home Page")
     public void given1() {
         printMethodName();
-        System.out.println(JBehaveExecution.getStory().getName());
-        System.out.println(JBehaveExecution.getScenario().getTitle());
-        System.out.println(JBehaveExecution.getStep());
-        System.out.println(JBehaveExecution.getExample());
+        JBehaveExecution.getStep().addLogOutput("Where am I?");
     }
 
     @Given("I open Login Page")
@@ -39,7 +36,6 @@ public class Step1 {
     @Then("I verify header 1")
     public void then1() {
         printMethodName();
-        System.out.println(JBehaveExecution.getStep());
     }
 
     @Then("I verify header 2")
