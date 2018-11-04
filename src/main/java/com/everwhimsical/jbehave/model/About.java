@@ -1,5 +1,10 @@
 package com.everwhimsical.jbehave.model;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 public class About {
 
@@ -11,11 +16,50 @@ public class About {
     private String environment;
     private String environmentHealth;
     private String userName;
-    private String repository;
+    private List<String> remoteList;
     private String branch;
     private String testToolName;
     private String frameworkName;
     private String frameworkVersion;
+
+    public About() {
+        this.executionOS = System.getProperty("os.name") + " " + System.getProperty("os.version");
+        this.userName = System.getProperty("user.name");
+        this.testToolName = "JBehave";
+        this.remoteList = new ArrayList<>();
+    }
+
+    public static About generateAbout() {
+        About about = new About();
+        about.setProjectName("JBehave Example");
+        about.setTeam("Lone Star");
+        about.setReleaseVersion("1.0.0");
+        about.setEnvironment("DEV");
+        about.setFrameworkName("JUnit");
+        about.setFrameworkVersion("4.12");
+        return about;
+    }
+
+    public void addGitInformation() {
+        try {
+            FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
+            Repository repository = repositoryBuilder
+                .setGitDir(new File(System.getProperty("user.dir") + File.separator + ".git"))
+                .readEnvironment()
+                .findGitDir()
+                .setMustExist(true)
+                .build();
+            setBranch(repository.getBranch());
+            repository.getConfig().getSubsections("remote")
+                .forEach(subSection -> {
+                    String remote = repository.getConfig().getString("remote", subSection, "url");
+                    addRemote(remote);
+                });
+
+        } catch (Exception ignored) {
+
+        }
+    }
 
     public String getRunId() {
         return runId;
@@ -77,12 +121,16 @@ public class About {
         this.userName = userName;
     }
 
-    public String getRepository() {
-        return repository;
+    public List<String> getRemoteList() {
+        return remoteList;
     }
 
-    public void setRepository(String repository) {
-        this.repository = repository;
+    public void setRemoteList(List<String> remoteList) {
+        this.remoteList = remoteList;
+    }
+
+    public void addRemote(String remote) {
+        this.remoteList.add(remote);
     }
 
     public String getBranch() {
