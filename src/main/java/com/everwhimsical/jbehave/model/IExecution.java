@@ -4,30 +4,35 @@ import com.everwhimsical.jbehave.internal.Commons;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-public class Scenario {
+public class IExecution {
 
+    private About about;
     private String id;
     private String name;
     private ZonedDateTime startDateTime;
     private ZonedDateTime endDateTime;
-    private Map<String, String> meta;
-    private Map<String, String> exampleRows;
     private String duration;
     private Status statusEnum;
     private String status;
-    private List<Step> steps;
+    private List<String> filters;
+    private List<IStory> stories;
 
-    public Scenario() {
-        this.meta = new HashMap<>();
-        this.exampleRows = new HashMap<>();
-        this.steps = new LinkedList<>();
+    public IExecution() {
+        this.stories = new LinkedList<>();
         this.statusEnum = Status.PASSED;
         this.status = Status.PASSED.getDisplayValue();
+        this.filters = new ArrayList<>();
+    }
+
+    public About getAbout() {
+        return about;
+    }
+
+    public void setAbout(About about) {
+        this.about = about;
     }
 
     public String getId() {
@@ -60,23 +65,6 @@ public class Scenario {
 
     public void setEndDateTime(ZonedDateTime endDateTime) {
         this.endDateTime = endDateTime;
-        this.duration = Commons.calculateDuration(startDateTime, endDateTime);
-    }
-
-    public Map<String, String> getMeta() {
-        return meta;
-    }
-
-    public void setMeta(Map<String, String> meta) {
-        this.meta = meta;
-    }
-
-    public Map<String, String> getExampleRows() {
-        return exampleRows;
-    }
-
-    public void setExampleRows(Map<String, String> exampleRows) {
-        this.exampleRows = exampleRows;
     }
 
     public void setStatus(String status) {
@@ -87,8 +75,8 @@ public class Scenario {
         return duration;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public Status getStatusEnum() {
+        return statusEnum;
     }
 
     public String getStatus() {
@@ -100,42 +88,47 @@ public class Scenario {
         this.status = status.getDisplayValue();
     }
 
-    public Status getStatusEnum() {
-        return statusEnum;
+    public List<String> getFilters() {
+        return filters;
     }
 
-    public List<Step> getSteps() {
-        if (steps == null) {
-            steps = new ArrayList<>();
+    public void setFilters(List<String> filters) {
+        this.filters = filters;
+    }
+
+    public List<IStory> getStories() {
+        if (stories == null) {
+            stories = new ArrayList<>();
         }
-        return steps;
+        return stories;
     }
 
-    public void setSteps(List<Step> steps) {
-        this.steps = steps;
+    public void setStories(List<IStory> stories) {
+        this.stories = stories;
     }
 
-    public void addTestMethod(Step step) {
-        this.steps.add(step);
+    public void startExecution() {
+        this.startDateTime = ZonedDateTime.now(ZoneOffset.UTC);
     }
 
-    public void updateTestStart() {
-        setStartDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+    public void endExecution() {
+        this.endDateTime = ZonedDateTime.now(ZoneOffset.UTC);
+        this.duration = Commons.calculateDuration(startDateTime, endDateTime);
     }
 
-    public void updateTestEnd() {
-        setEndDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+    public void addStory(IStory iStory) {
+        this.stories.add(iStory);
     }
 
     @Override
     public String toString() {
-        return "Scenario{" +
+        return "Execution{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", startDateTime=" + startDateTime +
             ", duration='" + duration + '\'' +
             ", status=" + status +
-            ", steps=" + steps +
+            ", stories=" + stories +
             '}';
     }
 }

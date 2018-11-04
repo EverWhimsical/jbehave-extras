@@ -4,35 +4,30 @@ import com.everwhimsical.jbehave.internal.Commons;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-public class Execution {
+public class IScenario {
 
-    private About about;
     private String id;
     private String name;
     private ZonedDateTime startDateTime;
     private ZonedDateTime endDateTime;
+    private Map<String, String> meta;
+    private Map<String, String> exampleRows;
     private String duration;
     private Status statusEnum;
     private String status;
-    private List<String> filters;
-    private List<Story> stories;
+    private List<IStep> ISteps;
 
-    public Execution() {
-        this.stories = new LinkedList<>();
+    public IScenario() {
+        this.meta = new HashMap<>();
+        this.exampleRows = new HashMap<>();
+        this.ISteps = new LinkedList<>();
         this.statusEnum = Status.PASSED;
         this.status = Status.PASSED.getDisplayValue();
-        this.filters = new ArrayList<>();
-    }
-
-    public About getAbout() {
-        return about;
-    }
-
-    public void setAbout(About about) {
-        this.about = about;
     }
 
     public String getId() {
@@ -65,6 +60,23 @@ public class Execution {
 
     public void setEndDateTime(ZonedDateTime endDateTime) {
         this.endDateTime = endDateTime;
+        this.duration = Commons.calculateDuration(startDateTime, endDateTime);
+    }
+
+    public Map<String, String> getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Map<String, String> meta) {
+        this.meta = meta;
+    }
+
+    public Map<String, String> getExampleRows() {
+        return exampleRows;
+    }
+
+    public void setExampleRows(Map<String, String> exampleRows) {
+        this.exampleRows = exampleRows;
     }
 
     public void setStatus(String status) {
@@ -73,14 +85,6 @@ public class Execution {
 
     public String getDuration() {
         return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
-    public Status getStatusEnum() {
-        return statusEnum;
     }
 
     public String getStatus() {
@@ -92,47 +96,42 @@ public class Execution {
         this.status = status.getDisplayValue();
     }
 
-    public List<String> getFilters() {
-        return filters;
+    public Status getStatusEnum() {
+        return statusEnum;
     }
 
-    public void setFilters(List<String> filters) {
-        this.filters = filters;
-    }
-
-    public List<Story> getStories() {
-        if (stories == null) {
-            stories = new ArrayList<>();
+    public List<IStep> getISteps() {
+        if (ISteps == null) {
+            ISteps = new ArrayList<>();
         }
-        return stories;
+        return ISteps;
     }
 
-    public void setStories(List<Story> stories) {
-        this.stories = stories;
+    public void setISteps(List<IStep> ISteps) {
+        this.ISteps = ISteps;
     }
 
-    public void startExecution() {
-        this.startDateTime = ZonedDateTime.now(ZoneOffset.UTC);
+    public void addStep(IStep iStep) {
+        this.ISteps.add(iStep);
     }
 
-    public void endExecution() {
-        this.endDateTime = ZonedDateTime.now(ZoneOffset.UTC);
-        this.duration = Commons.calculateDuration(startDateTime, endDateTime);
+    public void updateScenarioStart() {
+        setStartDateTime(ZonedDateTime.now(ZoneOffset.UTC));
     }
 
-    public void addTestSuite(Story story) {
-        this.stories.add(story);
+    public void updateScenarioEnd() {
+        setEndDateTime(ZonedDateTime.now(ZoneOffset.UTC));
     }
 
     @Override
     public String toString() {
-        return "Execution{" +
+        return "IScenario{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", startDateTime=" + startDateTime +
             ", duration='" + duration + '\'' +
             ", status=" + status +
-            ", stories=" + stories +
+            ", ISteps=" + ISteps +
             '}';
     }
 }

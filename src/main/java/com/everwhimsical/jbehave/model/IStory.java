@@ -6,20 +6,21 @@ import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Story {
+public class IStory {
 
     private String id;
     private String name;
-
+    private String description;
+    private String path;
     private ZonedDateTime startDateTime;
     private ZonedDateTime endDateTime;
     private String duration;
     private Status statusEnum;
     private String status;
-    private List<Scenario> scenarios;
+    private List<IScenario> IScenarios;
 
-    public Story() {
-        this.scenarios = new LinkedList<>();
+    public IStory() {
+        this.IScenarios = new LinkedList<>();
         this.statusEnum = Status.PASSED;
         this.status = Status.PASSED.getDisplayValue();
     }
@@ -38,6 +39,22 @@ public class Story {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public ZonedDateTime getStartDateTime() {
@@ -65,10 +82,6 @@ public class Story {
         return duration;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
     public Status getStatusEnum() {
         return statusEnum;
     }
@@ -82,16 +95,16 @@ public class Story {
         this.status = status.getDisplayValue();
     }
 
-    public List<Scenario> getScenarios() {
-        return scenarios;
+    public List<IScenario> getIScenarios() {
+        return IScenarios;
     }
 
-    public void setScenarios(List<Scenario> scenarios) {
-        this.scenarios = scenarios;
+    public void setIScenarios(List<IScenario> IScenarios) {
+        this.IScenarios = IScenarios;
     }
 
-    public void addTest(Scenario scenario) {
-        this.scenarios.add(scenario);
+    public void addScenario(IScenario iScenario) {
+        this.IScenarios.add(iScenario);
     }
 
     public void updateTestSuiteStart() {
@@ -104,13 +117,13 @@ public class Story {
 
     @Override
     public String toString() {
-        return "Story{" +
+        return "IStory{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", startDateTime=" + startDateTime +
             ", duration='" + duration + '\'' +
             ", status=" + status +
-            ", scenarios=" + scenarios +
+            ", IScenarios=" + IScenarios +
             '}';
     }
 }

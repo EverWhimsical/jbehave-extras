@@ -1,36 +1,60 @@
 package com.everwhimsical.jbehave.execution;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.jbehave.core.model.Scenario;
-import org.jbehave.core.model.Story;
+import com.everwhimsical.jbehave.model.IExecution;
+import com.everwhimsical.jbehave.model.IScenario;
+import com.everwhimsical.jbehave.model.IStep;
+import com.everwhimsical.jbehave.model.IStory;
+import java.util.Optional;
 
 /**
- * JBehave Utility class to get {@link Story}, {@link Scenario}, Examples and Step information.
+ * JBehave Utility class to get {@link IStory}, {@link IScenario}, {@link IStep} information.
  */
 public class JBehaveExecution {
 
-    private static final ThreadLocal<Story> STORY_THREAD = new InheritableThreadLocal<>();
-    private static final ThreadLocal<Scenario> SCENARIO_THREAD = new InheritableThreadLocal<>();
-    private static final ThreadLocal<String> STEP_THREAD = new InheritableThreadLocal<>();
-    private static final ThreadLocal<Map<String, String>> EXAMPLE_THREAD = InheritableThreadLocal
-        .withInitial(HashMap::new);
+    private static IExecution IEXECUTION = new IExecution();
+    private static final ThreadLocal<IStory> STORY_THREAD = new InheritableThreadLocal<>();
+    private static final ThreadLocal<IScenario> SCENARIO_THREAD = new InheritableThreadLocal<>();
+    private static final ThreadLocal<IStep> STEP_THREAD = new InheritableThreadLocal<>();
 
     /**
-     * Invoked before Story executes and saves it.
-     *
-     * @param story {@link Story} object.
+     * Invoked before Execution starts and saves it.
      */
-    public synchronized static void startStory(Story story) {
-        STORY_THREAD.set(story);
+    public synchronized static void startExecution() {
+        getExecution().startExecution();
     }
 
     /**
-     * Get the current Story.
+     * Get the current Execution.
      *
-     * @return {@link Story} object.
+     * @return {@link IExecution} object.
      */
-    public synchronized static Story getStory() {
+    public synchronized static IExecution getExecution() {
+        return IEXECUTION;
+    }
+
+    /**
+     * End and clear the current Execution.
+     */
+    public synchronized static void endExecution() {
+        updateStatus(getExecution());
+        getExecution().endExecution();
+    }
+
+    /**
+     * Invoked before IStory executes and saves it.
+     *
+     * @param IStory {@link IStory} object.
+     */
+    public synchronized static void startStory(IStory IStory) {
+        STORY_THREAD.set(IStory);
+    }
+
+    /**
+     * Get the current IStory.
+     *
+     * @return {@link IStory} object.
+     */
+    public synchronized static IStory getStory() {
         return STORY_THREAD.get();
     }
 
@@ -38,24 +62,29 @@ public class JBehaveExecution {
      * End and clear the current story.
      */
     public synchronized static void endStory() {
+        Optional.ofNullable(STORY_THREAD.get())
+            .ifPresent(iStory -> {
+                iStory.updateTestSuiteEnd();
+                getExecution().addStory(iStory);
+            });
         STORY_THREAD.remove();
     }
 
     /**
-     * Invoked before Scenario executes and saves it.
+     * Invoked before IScenario executes and saves it.
      *
-     * @param scenario {@link Scenario} object.
+     * @param IScenario {@link IScenario} object.
      */
-    public synchronized static void startScenario(Scenario scenario) {
-        SCENARIO_THREAD.set(scenario);
+    public synchronized static void startScenario(IScenario IScenario) {
+        SCENARIO_THREAD.set(IScenario);
     }
 
     /**
-     * Get the current Scenario.
+     * Get the current IScenario.
      *
-     * @return {@link Scenario} object.
+     * @return {@link IScenario} object.
      */
-    public synchronized static Scenario getScenario() {
+    public synchronized static IScenario getScenario() {
         return SCENARIO_THREAD.get();
     }
 
@@ -63,24 +92,29 @@ public class JBehaveExecution {
      * End and clear the current scenario.
      */
     public synchronized static void endScenario() {
+        Optional.ofNullable(SCENARIO_THREAD.get())
+            .ifPresent(iScenario -> {
+                iScenario.updateScenarioEnd();
+                getStory().addScenario(iScenario);
+            });
         SCENARIO_THREAD.remove();
     }
 
     /**
-     * Invoked before Step executes and saves it.
+     * Invoked before IStep executes and saves it.
      *
-     * @param step Step name.
+     * @param IStep {@link IStep} object.
      */
-    public synchronized static void startStep(String step) {
-        STEP_THREAD.set(step);
+    public synchronized static void startStep(IStep IStep) {
+        STEP_THREAD.set(IStep);
     }
 
     /**
-     * Get the current Step name.
+     * Get the current IStep name.
      *
-     * @return Step name.
+     * @return step {@link IStep} object.
      */
-    public synchronized static String getStep() {
+    public synchronized static IStep getStep() {
         return STEP_THREAD.get();
     }
 
@@ -88,31 +122,44 @@ public class JBehaveExecution {
      * End and clear the current step.
      */
     public synchronized static void endStep() {
+        Optional.ofNullable(STEP_THREAD.get())
+            .ifPresent(iStep -> {
+                iStep.updateStepEnd();
+                getScenario().addStep(iStep);
+            });
         STEP_THREAD.remove();
     }
 
-    /**
-     * Invoked before Scenario executes and saves the example rows.
-     *
-     * @param exampleRows Example rows if present.
-     */
-    public synchronized static void startExample(Map<String, String> exampleRows) {
-        EXAMPLE_THREAD.set(exampleRows);
-    }
+    private synchronized static void updateStatus(IExecution IExecution) {
+        for (IStory iStory : IExecution.getStories()) {
 
-    /**
-     * Get the current Scenario's example rows.
-     *
-     * @return Example Rows as a Map.
-     */
-    public synchronized static Map<String, String> getExample() {
-        return EXAMPLE_THREAD.get();
-    }
+            // Set the status of Story
+            for (IScenario iScenario : iStory.getIScenarios()) {
 
-    /**
-     * End and clear the current scenario's example row after scenario ends.
-     */
-    public synchronized static void endExample() {
-        EXAMPLE_THREAD.remove();
+                // Set the status of Scenario
+                for (IStep iStep : iScenario.getISteps()) {
+
+                    if (iStep.getStatusEnum().getPriority() < iScenario.getStatusEnum()
+                        .getPriority()) {
+                        iScenario.setStatus(iStep.getStatusEnum());
+                        iStory.setStatus(iStep.getStatusEnum());
+                        IExecution.setStatus(iStep.getStatusEnum());
+                        break;
+                    }
+                }
+                if (iScenario.getStatusEnum().getPriority() < iStory.getStatusEnum()
+                    .getPriority()) {
+                    iStory.setStatus(iScenario.getStatusEnum());
+                    IExecution.setStatus(iScenario.getStatusEnum());
+                    break;
+                }
+            }
+
+            if (iStory.getStatusEnum().getPriority() < IExecution.getStatusEnum()
+                .getPriority()) {
+                IExecution.setStatus(iStory.getStatusEnum());
+                break;
+            }
+        }
     }
 }

@@ -1,9 +1,12 @@
 package com.everwhimsical.jbehave.model;
 
 import com.everwhimsical.jbehave.internal.Commons;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Step {
+public class IStep {
 
     private String id;
     private String name;
@@ -11,13 +14,15 @@ public class Step {
     private ZonedDateTime endDateTime;
     private String duration;
     private Status statusEnum;
+    private List<String> logOutput;
     private String status;
     private Bug bug;
     private String stepClass;
     private String annotation;
     private String stepMethod;
 
-    public Step() {
+    public IStep() {
+        this.logOutput = new ArrayList<>();
         this.statusEnum = Status.PASSED;
         this.status = Status.PASSED.getDisplayValue();
     }
@@ -55,16 +60,8 @@ public class Step {
         this.duration = Commons.calculateDuration(startDateTime, endDateTime);
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getDuration() {
         return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
     }
 
     public Status getStatusEnum() {
@@ -78,6 +75,18 @@ public class Step {
     public void setStatus(Status status) {
         this.statusEnum = status;
         this.status = status.getDisplayValue();
+    }
+
+    public List<String> getLogOutput() {
+        return logOutput;
+    }
+
+    public void setLogOutput(List<String> logOutput) {
+        this.logOutput = logOutput;
+    }
+
+    public void addLogOutput(String log) {
+        this.logOutput.add(log);
     }
 
     public Bug getBug() {
@@ -111,10 +120,17 @@ public class Step {
     public void setStepMethod(String stepMethod) {
         this.stepMethod = stepMethod;
     }
+    public void updateStepStart() {
+        setStartDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+    }
+
+    public void updateStepEnd() {
+        setEndDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+    }
 
     @Override
     public String toString() {
-        return "Step{" +
+        return "IStep{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", startDateTime=" + startDateTime +
