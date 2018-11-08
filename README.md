@@ -2,9 +2,14 @@
 
 [![Build Status](https://travis-ci.org/EverWhimsical/jbehave-extras.svg?branch=master)](https://travis-ci.org/EverWhimsical/jbehave-extras)
 
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/EverWhimsical/jbehave-extras/master/LICENSE)
+
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.everwhimsical/jbehave-extras/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.everwhimsical/jbehave-extras)
+
 Simple utility classes to gather information about your JBehave project and execution.
 
 ## Usage
+
 ### JBehaveStepScanner
 Easily get all steps and duplicate steps in your project by using [JBehaveStepScanner](src/main/java/com/everwhimsical/jbehave/step/JBehaveStepScanner.java)
 
