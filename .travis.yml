@@ -5,14 +5,14 @@ before_install:
   - mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
   - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep -v '\[')
   - git tag "$project_version-$(git log --format=%h -1)"
+  - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
+  - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
 
 install:
   mvn install -DskipTests=true -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
 
 ## export GPG details
-before_deploy:
-  - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
-  - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
+#before_deploy:
 
 deploy:
 ## Build and release to maven central
