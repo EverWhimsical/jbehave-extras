@@ -1,10 +1,16 @@
 language: java
 
+# safelist
+branches:
+  only:
+  - master
+  - develop
+
 ## Get the project version
 before_install:
   - mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
   - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep -v '\[')
-  - git tag "$project_version-$(git log --format=%h -1)"
+  - test "${project_version#*-SNAPSHOT}" != "$project_version" || git tag "v$project_version-$(git log --format=%h -1)"
 
 install:
   mvn install -Dgpg.skip -B -V
