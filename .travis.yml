@@ -5,23 +5,11 @@ before_install:
   - mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
   - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep -v '\[')
   - git tag "$project_version-$(git log --format=%h -1)"
-  - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
-  - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
 
 install:
-  mvn install -DskipTests=true -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
-
-## export GPG details
-#before_deploy:
+  mvn install -Dgpg.skip -B -V
 
 deploy:
-## Build and release to maven central
-  - provider: script
-    script: mvn clean deploy --settings .maven.xml -DskipTests=true -B -U -Prelease
-    skip_cleanup: true
-    on:
-      repo: EverWhimsical/jbehave-extras
-      branch: master
 ## Create release in GitHub
   - provider: releases
     api_key:
@@ -38,3 +26,10 @@ deploy:
     body: Automatic JBehave Extras development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
     prerelease: true
     overwrite: true
+## Build and release to maven central
+  - provider: script
+    script: bash scripts/deploy.sh
+    skip_cleanup: true
+    on:
+      repo: EverWhimsical/jbehave-extras
+      branch: master
