@@ -27,7 +27,7 @@ before_deploy:
 
 ## Create release in GitHub
 deploy:
-  - provider: releases
+  - provider: script
     script: mvn clean deploy --settings .maven.xml -DskipTests=true -B -U -Prelease
     skip_cleanup: true
     on:
