@@ -10,12 +10,11 @@ public class IStep {
 
     private String id;
     private String name;
-    private ZonedDateTime startDateTime;
-    private ZonedDateTime endDateTime;
+    private String startDateTime;
+    private String endDateTime;
     private String duration;
-    private Status statusEnum;
+    private Status status;
     private List<String> logOutput;
-    private String status;
     private Bug bug;
     private String stepClass;
     private String annotation;
@@ -23,8 +22,7 @@ public class IStep {
 
     public IStep() {
         this.logOutput = new ArrayList<>();
-        this.statusEnum = Status.PASSED;
-        this.status = Status.PASSED.getDisplayValue();
+        this.status = Status.PASSED;
     }
 
     public String getId() {
@@ -43,38 +41,24 @@ public class IStep {
         this.name = name;
     }
 
-    public ZonedDateTime getStartDateTime() {
+    public String getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(ZonedDateTime startDateTime) {
-        this.startDateTime = startDateTime;
-    }
-
-    public ZonedDateTime getEndDateTime() {
+    public String getEndDateTime() {
         return endDateTime;
-    }
-
-    public void setEndDateTime(ZonedDateTime endDateTime) {
-        this.endDateTime = endDateTime;
-        this.duration = Commons.calculateDuration(startDateTime, endDateTime);
     }
 
     public String getDuration() {
         return duration;
     }
 
-    public Status getStatusEnum() {
-        return statusEnum;
-    }
-
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     public void setStatus(Status status) {
-        this.statusEnum = status;
-        this.status = status.getDisplayValue();
+        this.status = status;
     }
 
     public List<String> getLogOutput() {
@@ -120,12 +104,15 @@ public class IStep {
     public void setStepMethod(String stepMethod) {
         this.stepMethod = stepMethod;
     }
+
     public void updateStepStart() {
-        setStartDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+        this.startDateTime = ZonedDateTime.now(ZoneOffset.UTC).toString();
     }
 
     public void updateStepEnd() {
-        setEndDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+        this.endDateTime = ZonedDateTime.now(ZoneOffset.UTC).toString();
+        this.duration = Commons.calculateDuration(ZonedDateTime.parse(startDateTime),
+            ZonedDateTime.parse(endDateTime));
     }
 
     @Override
@@ -133,10 +120,15 @@ public class IStep {
         return "IStep{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
-            ", startDateTime=" + startDateTime +
+            ", startDateTime='" + startDateTime + '\'' +
+            ", endDateTime='" + endDateTime + '\'' +
             ", duration='" + duration + '\'' +
             ", status=" + status +
+            ", logOutput=" + logOutput +
             ", bug=" + bug +
+            ", stepClass='" + stepClass + '\'' +
+            ", annotation='" + annotation + '\'' +
+            ", stepMethod='" + stepMethod + '\'' +
             '}';
     }
 }

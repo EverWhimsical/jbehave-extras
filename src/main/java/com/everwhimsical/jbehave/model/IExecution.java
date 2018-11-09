@@ -12,18 +12,17 @@ public class IExecution {
     private About about;
     private String id;
     private String name;
-    private ZonedDateTime startDateTime;
-    private ZonedDateTime endDateTime;
+    private String startDateTime;
+    private String endDateTime;
     private String duration;
-    private Status statusEnum;
-    private String status;
+    private Status status;
+    private List<String> labels;
     private List<String> filters;
     private List<IStory> stories;
 
     public IExecution() {
         this.stories = new LinkedList<>();
-        this.statusEnum = Status.PASSED;
-        this.status = Status.PASSED.getDisplayValue();
+        this.status = Status.PASSED;
         this.filters = new ArrayList<>();
     }
 
@@ -51,41 +50,32 @@ public class IExecution {
         this.name = name;
     }
 
-    public ZonedDateTime getStartDateTime() {
+    public String getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(ZonedDateTime startDateTime) {
-        this.startDateTime = startDateTime;
-    }
-
-    public ZonedDateTime getEndDateTime() {
+    public String getEndDateTime() {
         return endDateTime;
-    }
-
-    public void setEndDateTime(ZonedDateTime endDateTime) {
-        this.endDateTime = endDateTime;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getDuration() {
         return duration;
     }
 
-    public Status getStatusEnum() {
-        return statusEnum;
-    }
-
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     public void setStatus(Status status) {
-        this.statusEnum = status;
-        this.status = status.getDisplayValue();
+        this.status = status;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
     }
 
     public List<String> getFilters() {
@@ -97,9 +87,6 @@ public class IExecution {
     }
 
     public List<IStory> getStories() {
-        if (stories == null) {
-            stories = new ArrayList<>();
-        }
         return stories;
     }
 
@@ -108,12 +95,13 @@ public class IExecution {
     }
 
     public void startExecution() {
-        this.startDateTime = ZonedDateTime.now(ZoneOffset.UTC);
+        this.startDateTime = ZonedDateTime.now(ZoneOffset.UTC).toString();
     }
 
     public void endExecution() {
-        this.endDateTime = ZonedDateTime.now(ZoneOffset.UTC);
-        this.duration = Commons.calculateDuration(startDateTime, endDateTime);
+        this.endDateTime = ZonedDateTime.now(ZoneOffset.UTC).toString();
+        this.duration = Commons.calculateDuration(ZonedDateTime.parse(startDateTime),
+            ZonedDateTime.parse(endDateTime));
     }
 
     public void addStory(IStory iStory) {
@@ -122,13 +110,17 @@ public class IExecution {
 
     @Override
     public String toString() {
-        return "Execution{" +
-            "id='" + id + '\'' +
+        return "IExecution{" +
+            "about=" + about +
+            ", id='" + id + '\'' +
             ", name='" + name + '\'' +
-            ", startDateTime=" + startDateTime +
+            ", startDateTime='" + startDateTime + '\'' +
+            ", endDateTime='" + endDateTime + '\'' +
             ", duration='" + duration + '\'' +
             ", status=" + status +
-            ", stories=" + stories +
+            ", labels=" + labels +
+            ", filters=" + filters +
+            ", stories=" + stories.size() +
             '}';
     }
 }

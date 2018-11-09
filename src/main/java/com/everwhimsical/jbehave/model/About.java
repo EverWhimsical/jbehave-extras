@@ -9,6 +9,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 public class About {
 
     private String runId;
+    private String relatedToRunId;
     private String projectName;
     private String team;
     private String releaseVersion;
@@ -67,6 +68,14 @@ public class About {
 
     public void setRunId(String runId) {
         this.runId = runId;
+    }
+
+    public String getRelatedToRunId() {
+        return relatedToRunId;
+    }
+
+    public void setRelatedToRunId(String relatedToRunId) {
+        this.relatedToRunId = relatedToRunId;
     }
 
     public String getProjectName() {

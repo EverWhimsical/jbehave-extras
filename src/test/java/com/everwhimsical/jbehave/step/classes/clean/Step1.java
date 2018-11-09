@@ -1,6 +1,8 @@
 package com.everwhimsical.jbehave.step.classes.clean;
 
 import com.everwhimsical.jbehave.execution.JBehaveExecution;
+import org.jbehave.core.annotations.Alias;
+import org.jbehave.core.annotations.Aliases;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
@@ -13,12 +15,14 @@ public class Step1 {
     }
 
     @Given("I open Home Page")
+    @Alias("I Open Home Page")
     public void given1() {
         printMethodName();
         JBehaveExecution.getStep().addLogOutput("Where am I?");
     }
 
     @Given("I open Login Page")
+    @Aliases(values = {"I OPEN LOGIN PAGE", "i open login page"})
     public void given2() {
         printMethodName();
     }
