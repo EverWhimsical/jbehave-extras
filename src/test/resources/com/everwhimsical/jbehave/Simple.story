@@ -4,7 +4,7 @@ Scenario: S1
 Meta:
 @Scenario1
 
-Given I open Home Page
+Given I Open Home Page
 When I click header 1
 When I click header 2
 Then I verify header 1

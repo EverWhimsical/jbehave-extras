@@ -14,10 +14,28 @@ public class JBehaveStepScannerTest {
     }
 
     @Test
+    public void testGetAllStepsWithAlias() {
+        JBehaveStepScanner jBehaveStepScanner = new JBehaveStepScanner(
+            "com.everwhimsical.jbehave.step.classes.clean");
+        jBehaveStepScanner.setAliasSearch(true);
+        Assert.assertEquals("Mismatch in All step count",
+            10, jBehaveStepScanner.getAllSteps().size());
+    }
+
+    @Test
     public void testGetDuplicateSteps() {
         JBehaveStepScanner jBehaveStepScanner = new JBehaveStepScanner(
             "com.everwhimsical.jbehave.step.classes.duplicate");
         Assert.assertEquals("Mismatch in Duplicate step count",
-            8, jBehaveStepScanner.getDuplicateSteps().size());
+            3, jBehaveStepScanner.getDuplicateSteps().size());
+    }
+
+    @Test
+    public void testGetDuplicateStepsWithAlias() {
+        JBehaveStepScanner jBehaveStepScanner = new JBehaveStepScanner(
+            "com.everwhimsical.jbehave.step.classes.duplicate");
+        jBehaveStepScanner.setAliasSearch(true);
+        Assert.assertEquals("Mismatch in Duplicate step count",
+            4, jBehaveStepScanner.getDuplicateSteps().size());
     }
 }

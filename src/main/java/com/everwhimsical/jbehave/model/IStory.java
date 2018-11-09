@@ -12,17 +12,15 @@ public class IStory {
     private String name;
     private String description;
     private String path;
-    private ZonedDateTime startDateTime;
-    private ZonedDateTime endDateTime;
+    private String startDateTime;
+    private String endDateTime;
     private String duration;
-    private Status statusEnum;
-    private String status;
+    private Status status;
     private List<IScenario> IScenarios;
 
     public IStory() {
         this.IScenarios = new LinkedList<>();
-        this.statusEnum = Status.PASSED;
-        this.status = Status.PASSED.getDisplayValue();
+        this.status = Status.PASSED;
     }
 
     public String getId() {
@@ -57,42 +55,24 @@ public class IStory {
         this.path = path;
     }
 
-    public ZonedDateTime getStartDateTime() {
+    public String getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(ZonedDateTime startDateTime) {
-        this.startDateTime = startDateTime;
-    }
-
-    public ZonedDateTime getEndDateTime() {
+    public String getEndDateTime() {
         return endDateTime;
-    }
-
-    public void setEndDateTime(ZonedDateTime endDateTime) {
-        this.endDateTime = endDateTime;
-        this.duration = Commons.calculateDuration(startDateTime, endDateTime);
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getDuration() {
         return duration;
     }
 
-    public Status getStatusEnum() {
-        return statusEnum;
-    }
-
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     public void setStatus(Status status) {
-        this.statusEnum = status;
-        this.status = status.getDisplayValue();
+        this.status = status;
     }
 
     public List<IScenario> getIScenarios() {
@@ -108,11 +88,14 @@ public class IStory {
     }
 
     public void updateTestSuiteStart() {
-        setStartDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+        this.startDateTime = ZonedDateTime.now(ZoneOffset.UTC).toString();
     }
 
     public void updateTestSuiteEnd() {
-        setEndDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+        this.endDateTime = ZonedDateTime.now(ZoneOffset.UTC).toString();
+        this.duration = Commons.calculateDuration(ZonedDateTime.parse(startDateTime),
+            ZonedDateTime.parse(endDateTime));
+
     }
 
     @Override
@@ -120,10 +103,13 @@ public class IStory {
         return "IStory{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
-            ", startDateTime=" + startDateTime +
+            ", description='" + description + '\'' +
+            ", path='" + path + '\'' +
+            ", startDateTime='" + startDateTime + '\'' +
+            ", endDateTime='" + endDateTime + '\'' +
             ", duration='" + duration + '\'' +
             ", status=" + status +
-            ", IScenarios=" + IScenarios +
+            ", IScenarios=" + IScenarios.size() +
             '}';
     }
 }
