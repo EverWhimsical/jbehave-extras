@@ -13,6 +13,7 @@ before_install:
   - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep -v '\[')
   - export is_release=0; if [[ ${project_version} != *SNAPSHOT* ]]; then  is_release=1; fi
   - if [ $is_release=1 ]; then git tag "v$project_version-$(git log --format=%h -1)"; fi
+  - export is_release_branch=0; if [[ "$TRAVIS_BRANCH" == "master" || "$TRAVIS_BRANCH" == "develop" ]]; then is_release_branch=1; fi
 #  - test "${project_version#*-SNAPSHOT}" != "$project_version" || git tag "v$project_version-$(git log --format=%h -1)"
 
 install:
@@ -30,7 +31,7 @@ deploy:
     skip_cleanup: true
     on:
       repo: EverWhimsical/jbehave-extras
-      condition: branch IN (master, develop) && $is_release = 1
+      condition: $is_release = 1 && $is_release_branch = 1
     name: JBehave Extras - $project_version
     body: Automatic JBehave Extras development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
     prerelease: true
@@ -41,4 +42,4 @@ deploy:
     skip_cleanup: true
     on:
       repo: EverWhimsical/jbehave-extras
-      condition: branch IN (master, develop)
+      condition: $is_release_branch = 1
