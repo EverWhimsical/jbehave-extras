@@ -5,17 +5,15 @@ branches:
   only:
   - master
   - develop
-  - stable
 
 ## Get the project version
 before_install:
   - mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
   - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep -v '\[')
-  - export is_release=0; if [[ ${project_version} != *SNAPSHOT* ]]; then  is_release=1; fi
-  - if [ $is_release=1 ]; then git tag "v$project_version-$(git log --format=%h -1)"; fi
+  - export is_github_release=0; if [[ ${project_version} != *SNAPSHOT* ]]; then is_github_release=1; fi
+  - if [ $is_github_release=1 ]; then git tag "v$project_version-$(git log --format=%h -1)"; fi
   - export is_release_branch=0; if [[ "$TRAVIS_BRANCH" == "master" || "$TRAVIS_BRANCH" == "develop" ]]; then is_release_branch=1; fi
-  - echo "project_version $project_version | is_release $is_release | is_release_branch $is_release_branch"
-#  - test "${project_version#*-SNAPSHOT}" != "$project_version" || git tag "v$project_version-$(git log --format=%h -1)"
+  - echo "project_version $project_version | is_github_release $is_github_release | is_release_branch $is_release_branch"
 
 install:
   mvn install -Dgpg.skip -B -V
@@ -32,7 +30,8 @@ deploy:
     skip_cleanup: true
     on:
       repo: EverWhimsical/jbehave-extras
-      condition: $is_release = 1 && $is_release_branch = 1
+      all_branches: true
+      condition: $is_github_release = 1 && $is_release_branch = 1
     name: JBehave Extras - $project_version
     body: Automatic JBehave Extras development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
     prerelease: true
@@ -43,4 +42,5 @@ deploy:
     skip_cleanup: true
     on:
       repo: EverWhimsical/jbehave-extras
+      all_branches: true
       condition: $is_release_branch = 1
