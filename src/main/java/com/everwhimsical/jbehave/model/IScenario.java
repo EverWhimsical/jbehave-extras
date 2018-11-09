@@ -3,7 +3,6 @@ package com.everwhimsical.jbehave.model;
 import com.everwhimsical.jbehave.internal.Commons;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,21 +12,19 @@ public class IScenario {
 
     private String id;
     private String name;
-    private ZonedDateTime startDateTime;
-    private ZonedDateTime endDateTime;
+    private String startDateTime;
+    private String endDateTime;
     private Map<String, String> meta;
     private Map<String, String> exampleRows;
     private String duration;
-    private Status statusEnum;
-    private String status;
+    private Status status;
     private List<IStep> ISteps;
 
     public IScenario() {
         this.meta = new HashMap<>();
         this.exampleRows = new HashMap<>();
         this.ISteps = new LinkedList<>();
-        this.statusEnum = Status.PASSED;
-        this.status = Status.PASSED.getDisplayValue();
+        this.status = Status.PASSED;
     }
 
     public String getId() {
@@ -46,21 +43,12 @@ public class IScenario {
         this.name = name;
     }
 
-    public ZonedDateTime getStartDateTime() {
+    public String getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(ZonedDateTime startDateTime) {
-        this.startDateTime = startDateTime;
-    }
-
-    public ZonedDateTime getEndDateTime() {
+    public String getEndDateTime() {
         return endDateTime;
-    }
-
-    public void setEndDateTime(ZonedDateTime endDateTime) {
-        this.endDateTime = endDateTime;
-        this.duration = Commons.calculateDuration(startDateTime, endDateTime);
     }
 
     public Map<String, String> getMeta() {
@@ -79,31 +67,19 @@ public class IScenario {
         this.exampleRows = exampleRows;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getDuration() {
         return duration;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
     public void setStatus(Status status) {
-        this.statusEnum = status;
-        this.status = status.getDisplayValue();
-    }
-
-    public Status getStatusEnum() {
-        return statusEnum;
+        this.status = status;
     }
 
     public List<IStep> getISteps() {
-        if (ISteps == null) {
-            ISteps = new ArrayList<>();
-        }
         return ISteps;
     }
 
@@ -116,11 +92,13 @@ public class IScenario {
     }
 
     public void updateScenarioStart() {
-        setStartDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+        this.startDateTime = ZonedDateTime.now(ZoneOffset.UTC).toString();
     }
 
     public void updateScenarioEnd() {
-        setEndDateTime(ZonedDateTime.now(ZoneOffset.UTC));
+        this.endDateTime = ZonedDateTime.now(ZoneOffset.UTC).toString();
+        this.duration = Commons.calculateDuration(ZonedDateTime.parse(startDateTime),
+            ZonedDateTime.parse(endDateTime));
     }
 
     @Override
@@ -128,10 +106,13 @@ public class IScenario {
         return "IScenario{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
-            ", startDateTime=" + startDateTime +
+            ", startDateTime='" + startDateTime + '\'' +
+            ", endDateTime='" + endDateTime + '\'' +
+            ", meta=" + meta +
+            ", exampleRows=" + exampleRows +
             ", duration='" + duration + '\'' +
             ", status=" + status +
-            ", ISteps=" + ISteps +
+            ", ISteps=" + ISteps.size() +
             '}';
     }
 }
