@@ -8,39 +8,38 @@ branches:
 
 ## Get the project version
 before_install:
-  - mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
-  - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep -v '\[')
-  - export is_release_candidate=0; if [[ ${project_version} != *SNAPSHOT* ]]; then is_release_candidate=1; fi
-  - if [ $is_release_candidate=1 ]; then git tag "v$project_version-$(git log --format=%h -1)"; fi
-  - export is_release_branch=0; if [[ "$TRAVIS_BRANCH" == "master" || "$TRAVIS_BRANCH" == "develop" ]]; then is_release_branch=1; fi
-  - echo "project_version $project_version | is_release_candidate $is_release_candidate | is_release_branch $is_release_branch"
+- mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
+- export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep -v '\[')
+- export is_release_candidate=0; if [[ ${project_version} != *SNAPSHOT* ]]; then is_release_candidate=1; fi
+- if [ $is_release_candidate=1 ]; then git tag "v$project_version-$(git log --format=%h -1)"; fi
+- export is_release_branch=0; if [[ "$TRAVIS_BRANCH" == "master" || "$TRAVIS_BRANCH" == "develop" ]]; then is_release_branch=1; fi
+- echo "project_version $project_version | is_release_candidate $is_release_candidate | is_release_branch $is_release_branch"
 
 install:
   mvn install -Dgpg.skip -B -V
 
 deploy:
 ## Create release in GitHub
-  - provider: releases
-    api_key:
-      secure: VL2ZrHXLEPkOUp5JBL1knomWi/ot9vNv96XaEmHhb9kfsUrAOqx5zoWRsg1l+DRws0LFHRiBsSvrMfu+c5NV8w4hqNEkabN1KILPBD9JxWJp4n+0zv/lK5IjbMhL35S7ABG4ntKJZYwR6eBMvXzmyP33FfyUkS4WlDhfO6GKsM10bmaUQI2v1yxGzFpUiKNw9ueAyvxjV5+NTa0p0t2XEUuYsvafn1HoP5sZZjuVuq88rTvH2X/95sFNriM7cao+My5ObJKpz9yQkizxVoGnXGYHCy/2U4oIk+gdDiDmcFlpb8QUABKfHqrz2UKvvbwkgV0hDUIlxcVoNp+czE1nXSuDIf3m+1rf0bZsKTMYEMd7eLZY+UzzQKjaroHRZ4fWkFLK5UTCwXG+Gpn3yDbWK2b0hgRRrafpAvhlw3Jbf/JwwBlSaHvtq+YS7RYoFt4to555QXrcFcOaG7JbW/G4kYDxvQTXGaMrXgkoHovXzkErvkgvAguTc/FtXEg9Bt1fOi3M5bHiJLEYo7eEluKCrLjy+k22ui+Ik/J3NygMGG8nBs+eGhGx7JnNxs6yQ2T5fXA25CbfJxtWS9WPBDYwul/+PSuZmpsXF9kaMBQ7JRK7y8fQfx6hKCUCS98ecuVizTzuIOr4s7FH3eUkuLsAck1MLxSnlYH32m3ov64BE30=
-    file:
-      - target/jbehave-extras-$project_version.jar
-      - target/jbehave-extras-$project_version-javadoc.jar
-      - target/jbehave-extras-$project_version-sources.jar
-    skip_cleanup: true
-    on:
-      repo: EverWhimsical/jbehave-extras
-      all_branches: true
-      condition: $is_release_candidate = 1 && $is_release_branch = 1
-    name: JBehave Extras - $project_version
-    body: Automatic JBehave Extras development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
-    prerelease: true
-    overwrite: true
+- provider: releases
+  api_key:
+    secure: VL2ZrHXLEPkOUp5JBL1knomWi/ot9vNv96XaEmHhb9kfsUrAOqx5zoWRsg1l+DRws0LFHRiBsSvrMfu+c5NV8w4hqNEkabN1KILPBD9JxWJp4n+0zv/lK5IjbMhL35S7ABG4ntKJZYwR6eBMvXzmyP33FfyUkS4WlDhfO6GKsM10bmaUQI2v1yxGzFpUiKNw9ueAyvxjV5+NTa0p0t2XEUuYsvafn1HoP5sZZjuVuq88rTvH2X/95sFNriM7cao+My5ObJKpz9yQkizxVoGnXGYHCy/2U4oIk+gdDiDmcFlpb8QUABKfHqrz2UKvvbwkgV0hDUIlxcVoNp+czE1nXSuDIf3m+1rf0bZsKTMYEMd7eLZY+UzzQKjaroHRZ4fWkFLK5UTCwXG+Gpn3yDbWK2b0hgRRrafpAvhlw3Jbf/JwwBlSaHvtq+YS7RYoFt4to555QXrcFcOaG7JbW/G4kYDxvQTXGaMrXgkoHovXzkErvkgvAguTc/FtXEg9Bt1fOi3M5bHiJLEYo7eEluKCrLjy+k22ui+Ik/J3NygMGG8nBs+eGhGx7JnNxs6yQ2T5fXA25CbfJxtWS9WPBDYwul/+PSuZmpsXF9kaMBQ7JRK7y8fQfx6hKCUCS98ecuVizTzuIOr4s7FH3eUkuLsAck1MLxSnlYH32m3ov64BE30=
+  file:
+  - target/jbehave-extras-$project_version.jar
+  - target/jbehave-extras-$project_version-javadoc.jar
+  - target/jbehave-extras-$project_version-sources.jar
+  skip_cleanup: true
+  on:
+    repo: EverWhimsical/jbehave-extras
+    branch: master
+    condition: $is_release_candidate = 1
+  name: JBehave Extras - $project_version
+  body: Automatic JBehave Extras development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
+  prerelease: true
+  overwrite: true
 ## Build and release to maven central
-  - provider: script
-    script: bash scripts/deploy.sh
-    skip_cleanup: true
-    on:
-      repo: EverWhimsical/jbehave-extras
-      all_branches: true
-      condition: $is_release_branch = 1
+- provider: script
+  script: bash utilities/deploy.sh
+  skip_cleanup: true
+  on:
+    repo: EverWhimsical/jbehave-extras
+    all_branches: true

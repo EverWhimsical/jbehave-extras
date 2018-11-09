@@ -11,10 +11,10 @@ import java.util.Optional;
  */
 public class JBehaveExecution {
 
-    private static IExecution IEXECUTION = new IExecution();
     private static final ThreadLocal<IStory> STORY_THREAD = new InheritableThreadLocal<>();
     private static final ThreadLocal<IScenario> SCENARIO_THREAD = new InheritableThreadLocal<>();
     private static final ThreadLocal<IStep> STEP_THREAD = new InheritableThreadLocal<>();
+    private static IExecution IEXECUTION = new IExecution();
 
     /**
      * Invoked before Execution starts and saves it.
@@ -139,25 +139,25 @@ public class JBehaveExecution {
                 // Set the status of Scenario
                 for (IStep iStep : iScenario.getISteps()) {
 
-                    if (iStep.getStatusEnum().getPriority() < iScenario.getStatusEnum()
+                    if (iStep.getStatus().getPriority() < iScenario.getStatus()
                         .getPriority()) {
-                        iScenario.setStatus(iStep.getStatusEnum());
-                        iStory.setStatus(iStep.getStatusEnum());
-                        IExecution.setStatus(iStep.getStatusEnum());
+                        iScenario.setStatus(iStep.getStatus());
+                        iStory.setStatus(iStep.getStatus());
+                        IExecution.setStatus(iStep.getStatus());
                         break;
                     }
                 }
-                if (iScenario.getStatusEnum().getPriority() < iStory.getStatusEnum()
+                if (iScenario.getStatus().getPriority() < iStory.getStatus()
                     .getPriority()) {
-                    iStory.setStatus(iScenario.getStatusEnum());
-                    IExecution.setStatus(iScenario.getStatusEnum());
+                    iStory.setStatus(iScenario.getStatus());
+                    IExecution.setStatus(iScenario.getStatus());
                     break;
                 }
             }
 
-            if (iStory.getStatusEnum().getPriority() < IExecution.getStatusEnum()
+            if (iStory.getStatus().getPriority() < IExecution.getStatus()
                 .getPriority()) {
-                IExecution.setStatus(iStory.getStatusEnum());
+                IExecution.setStatus(iStory.getStatus());
                 break;
             }
         }

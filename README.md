@@ -6,6 +6,8 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.everwhimsical/jbehave-extras/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.everwhimsical/jbehave-extras)
 
+[![Known Vulnerabilities](https://snyk.io/test/github/EverWhimsical/jbehave-extras/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/EverWhimsical/jbehave-extras?targetFile=pom.xml)
+
 Simple utility classes to gather information about your JBehave project and execution.
 
 ## Usage

@@ -1,4 +1,4 @@
-package com.everwhimsical.jbehave.step;
+package com.everwhimsical.jbehave.model;
 
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ public class JBehaveStepInfo {
     private String className;
     private String methodName;
 
-    JBehaveStepInfo(String annotation, String step, String className,
+    public JBehaveStepInfo(String annotation, String step, String className,
         String methodName) {
         this.annotation = annotation;
         this.step = step;

@@ -1,11 +1,16 @@
 package com.everwhimsical.jbehave.step;
 
+import com.everwhimsical.jbehave.model.DuplicateJBehaveStepInfo;
+import com.everwhimsical.jbehave.model.JBehaveStepInfo;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.jbehave.core.annotations.Alias;
+import org.jbehave.core.annotations.Aliases;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -41,6 +46,7 @@ import org.reflections.scanners.MethodAnnotationsScanner;
 public class JBehaveStepScanner {
 
     private final String[] packageNames;
+    private boolean aliasSearch = false;
 
     /**
      * Construct JBehaveStepScanner using package names.
@@ -51,15 +57,29 @@ public class JBehaveStepScanner {
         this.packageNames = packageNames;
     }
 
+    public void setAliasSearch(boolean aliasSearch) {
+        this.aliasSearch = aliasSearch;
+    }
+
     /**
      * Scans all the steps and returns duplicate steps in specified packages.
      *
-     * @return List of duplicate {@link JBehaveStepInfo} object.
+     * @return List of duplicate {@link DuplicateJBehaveStepInfo} object.
      */
-    public List<JBehaveStepInfo> getDuplicateSteps() {
+    public List<DuplicateJBehaveStepInfo> getDuplicateSteps() {
         List<JBehaveStepInfo> allSteps = getAllSteps();
-        return allSteps.stream()
-            .filter(step -> Collections.frequency(allSteps, step) > 1).collect(Collectors.toList());
+        List<DuplicateJBehaveStepInfo> duplicateJBehaveStepInfoList = new ArrayList<>();
+        allSteps.stream()
+            .filter(step -> Collections.frequency(allSteps, step) > 1)
+            .collect(Collectors.groupingBy(getStepGrouper()))
+            .forEach((step, stepList) -> {
+                duplicateJBehaveStepInfoList.add(new DuplicateJBehaveStepInfo(step, stepList));
+            });
+        return duplicateJBehaveStepInfoList;
+    }
+
+    private Function<JBehaveStepInfo, String> getStepGrouper() {
+        return aliasSearch ? JBehaveStepInfo::getStep : JBehaveStepInfo::getAnnotatedStep;
     }
 
     /**
@@ -98,6 +118,30 @@ public class JBehaveStepScanner {
             JBehaveStepInfo info = new JBehaveStepInfo(annotation, value,
                 then.getDeclaringClass().getCanonicalName(), then.getName());
             jBehaveStepInfoList.add(info);
+        }
+
+        if (!aliasSearch) {
+            return jBehaveStepInfoList;
+        }
+
+        Set<Method> aliasSet = reflections.getMethodsAnnotatedWith(Alias.class);
+        Set<Method> aliasesSet = reflections.getMethodsAnnotatedWith(Aliases.class);
+        for (Method alias : aliasSet) {
+            String annotation = Alias.class.getSimpleName();
+            String value = alias.getAnnotation(Alias.class).value();
+
+            JBehaveStepInfo info = new JBehaveStepInfo(annotation, value,
+                alias.getDeclaringClass().getCanonicalName(), alias.getName());
+            jBehaveStepInfoList.add(info);
+        }
+        for (Method alias : aliasesSet) {
+            String annotation = Aliases.class.getSimpleName();
+            String[] values = alias.getAnnotation(Aliases.class).values();
+            for (String value : values) {
+                JBehaveStepInfo info = new JBehaveStepInfo(annotation, value,
+                    alias.getDeclaringClass().getCanonicalName(), alias.getName());
+                jBehaveStepInfoList.add(info);
+            }
         }
 
         return jBehaveStepInfoList;
