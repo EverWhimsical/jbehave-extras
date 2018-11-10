@@ -46,7 +46,7 @@ import org.reflections.scanners.MethodAnnotationsScanner;
 public class JBehaveStepScanner {
 
     private final String[] packageNames;
-    private boolean aliasSearch = false;
+    private boolean aliasScan = false;
 
     /**
      * Construct JBehaveStepScanner using package names.
@@ -57,8 +57,8 @@ public class JBehaveStepScanner {
         this.packageNames = packageNames;
     }
 
-    public void setAliasSearch(boolean aliasSearch) {
-        this.aliasSearch = aliasSearch;
+    public void setAliasScan(boolean aliasScan) {
+        this.aliasScan = aliasScan;
     }
 
     /**
@@ -79,7 +79,7 @@ public class JBehaveStepScanner {
     }
 
     private Function<JBehaveStepInfo, String> getStepGrouper() {
-        return aliasSearch ? JBehaveStepInfo::getStep : JBehaveStepInfo::getAnnotatedStep;
+        return aliasScan ? JBehaveStepInfo::getStep : JBehaveStepInfo::getAnnotatedStep;
     }
 
     /**
@@ -120,7 +120,7 @@ public class JBehaveStepScanner {
             jBehaveStepInfoList.add(info);
         }
 
-        if (!aliasSearch) {
+        if (!aliasScan) {
             return jBehaveStepInfoList;
         }
 
