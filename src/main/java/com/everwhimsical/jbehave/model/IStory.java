@@ -23,6 +23,11 @@ public class IStory {
         this.status = Status.PASSED;
     }
 
+    public void generateId(String name) {
+        this.id = String.format("%s_%s_%s", name, System.currentTimeMillis(),
+            Thread.currentThread().getId());
+    }
+
     public String getId() {
         return id;
     }
@@ -37,6 +42,7 @@ public class IStory {
 
     public void setName(String name) {
         this.name = name;
+        generateId(name);
     }
 
     public String getDescription() {

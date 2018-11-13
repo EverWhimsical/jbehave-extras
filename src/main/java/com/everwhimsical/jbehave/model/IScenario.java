@@ -12,6 +12,7 @@ public class IScenario {
 
     private String id;
     private String name;
+    private String description;
     private String startDateTime;
     private String endDateTime;
     private Map<String, String> meta;
@@ -25,6 +26,11 @@ public class IScenario {
         this.exampleRows = new HashMap<>();
         this.ISteps = new LinkedList<>();
         this.status = Status.PASSED;
+    }
+
+    public void generateId(String name) {
+        this.id = String.format("%s_%s_%s", name, System.currentTimeMillis(),
+            Thread.currentThread().getId());
     }
 
     public String getId() {
@@ -41,6 +47,15 @@ public class IScenario {
 
     public void setName(String name) {
         this.name = name;
+        generateId(name);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getStartDateTime() {

@@ -26,6 +26,11 @@ public class IExecution {
         this.filters = new ArrayList<>();
     }
 
+    public void generateId(String name) {
+        this.id = String.format("%s_%s_%s", name, System.currentTimeMillis(),
+            Thread.currentThread().getId());
+    }
+
     public About getAbout() {
         return about;
     }
@@ -48,6 +53,7 @@ public class IExecution {
 
     public void setName(String name) {
         this.name = name;
+        generateId(name);
     }
 
     public String getStartDateTime() {
