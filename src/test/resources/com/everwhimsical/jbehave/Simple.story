@@ -14,3 +14,4 @@ Then I print <symbol>
 Examples:
 |Meta:|symbol|
 |@IT R1|STK1|
+|@IT R2|STK2|

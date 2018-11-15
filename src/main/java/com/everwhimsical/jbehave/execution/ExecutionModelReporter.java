@@ -7,6 +7,7 @@ import com.everwhimsical.jbehave.model.IStory;
 import com.everwhimsical.jbehave.model.Status;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jbehave.core.model.Meta;
@@ -29,6 +30,8 @@ import org.jbehave.core.reporters.StoryReporter;
  */
 public class ExecutionModelReporter extends NullStoryReporter {
 
+    private static final ThreadLocal<Scenario> SCENARIO_THREAD = new InheritableThreadLocal<>();
+
     @Override
     public void beforeStory(Story story, boolean givenStory) {
         IStory iStory = new IStory();
@@ -37,15 +40,21 @@ public class ExecutionModelReporter extends NullStoryReporter {
         iStory.setDescription(story.getDescription().asString());
         iStory.setPath(story.getPath());
         JBehaveExecution.startStory(iStory);
+        SCENARIO_THREAD.remove();
     }
 
     @Override
     public void afterStory(boolean givenOrRestartingStory) {
         JBehaveExecution.endStory();
+        SCENARIO_THREAD.remove();
     }
 
     @Override
     public void beforeScenario(Scenario scenario) {
+        SCENARIO_THREAD.set(scenario);
+        if (scenario.getExamplesTable().getRowCount() > 0) {
+            return;
+        }
         Meta meta = scenario.getMeta();
         Map<String, String> metaMap = new HashMap<>();
         meta.getPropertyNames().forEach(key -> {
@@ -66,7 +75,21 @@ public class ExecutionModelReporter extends NullStoryReporter {
 
     @Override
     public void example(Map<String, String> tableRow) {
-        JBehaveExecution.getScenario().setExampleRows(tableRow);
+        Scenario scenario = SCENARIO_THREAD.get();
+        Optional.ofNullable(JBehaveExecution.getScenario())
+            .ifPresent(s -> JBehaveExecution.endScenario());
+        Meta meta = scenario.getMeta();
+        Map<String, String> metaMap = new HashMap<>();
+        meta.getPropertyNames().forEach(key -> {
+            String value = meta.getProperty(key);
+            metaMap.put(key, value);
+        });
+        IScenario iScenario = new IScenario();
+        iScenario.updateScenarioStart();
+        iScenario.setName(scenario.getTitle());
+        iScenario.setMeta(metaMap);
+        iScenario.setExampleRows(tableRow);
+        JBehaveExecution.startScenario(iScenario);
     }
 
     @Override
