@@ -25,6 +25,11 @@ public class IStep {
         this.status = Status.PASSED;
     }
 
+    public void generateId(String name) {
+        this.id = String.format("%s_%s_%s", name, System.currentTimeMillis(),
+            Thread.currentThread().getId());
+    }
+
     public String getId() {
         return id;
     }
@@ -39,6 +44,7 @@ public class IStep {
 
     public void setName(String name) {
         this.name = name;
+        generateId(name);
     }
 
     public String getStartDateTime() {
