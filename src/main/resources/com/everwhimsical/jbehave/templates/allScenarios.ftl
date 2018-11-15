@@ -13,22 +13,18 @@
                            data-show-export="true">
                         <thead>
                         <tr>
-                            <th data-field="name" data-filter-control="input" data-sortable="true">
+                            <th data-field="scenarioName" data-filter-control="input" data-sortable="true">
                                 Scenario Name
                             </th>
-                            <th data-field="meta" data-filter-control="input" data-sortable="true">
-                                Meta
+                            <th data-field="scenarioInformation" data-filter-control="input" data-sortable="true">
+                                Scenario Information
                             </th>
-                            <th data-field="exampleRow" data-filter-control="input" data-sortable="true">
-                                Example Row
-                            </th>
-                            <th data-field="steps" data-filter-control="input" data-sortable="true">
+                            <th data-field="steps">
                                 Steps
                             </th>
-                            <th data-field="startDateTime" data-filter-control="input" data-sortable="true">
-                                Start Time
+                            <th data-field="timeAndDuration">
+                                Time and Duration
                             </th>
-                            <th data-field="duration" data-sortable="true">Duration</th>
                             <th data-field="status" data-filter-control="select"data-sortable="true">Status </th>
                         </tr>
                         </thead>
@@ -42,9 +38,8 @@
                                         <td>
                                             <#if IScenario.meta?has_content>&nbsp;[
                                                 <#list IScenario.meta as key, value>${key}:${value}</#list>
+                                                <br/>
                                             ]</#if>
-                                        </td>
-                                        <td>
                                             <#if IScenario.exampleRows?has_content>&nbsp;[
                                                 <#list IScenario.exampleRows as key, value>${key}:${value}</#list>
                                             ]</#if>
@@ -58,9 +53,6 @@
                                                         <th data-field="name">
                                                             Step Name
                                                         </th>
-                                                        <th data-field="meta">
-                                                            Class
-                                                        </th>
                                                         <th data-field="duration" data-sortable="true">Duration</th>
                                                         <th data-field="status" data-filter-control="select"data-sortable="true">Status </th>
                                                     </tr>
@@ -71,10 +63,7 @@
                                                         <td>
                                                             ${IStep.annotation} ${IStep.name}
                                                         </td>
-                                                        <td>
-                                                            <#if IStep.stepClass?has_content>&nbsp;[${IStep.stepClass}]</#if>
-                                                            <#if IStep.stepMethod?has_content>&nbsp;[${IStep.stepMethod}]</#if>
-                                                        </td>
+
                                                         <td>${IStep.duration}</td>
                                                         <td class="text-center">
                                                             <#if IStep.status == 'PASSED'>
@@ -90,8 +79,10 @@
                                                     </tbody>
                                                 </table>
                                         </td>
-                                        <td>${formatDateTime(IScenario.startDateTime, "yyyy/MM/dd hh:mm:ss a")}</td>
-                                        <td>${IScenario.duration}</td>
+                                        <td>
+                                            ${formatDateTime(IScenario.startDateTime, "yyyy/MM/dd hh:mm:ss a")}
+                                            <br/>${IScenario.duration}
+                                        </td>
                                         <td class="text-center">
                                             <#if IScenario.status == 'PASSED'>
                                                 <span class="badge badge-success">PASSED</span>

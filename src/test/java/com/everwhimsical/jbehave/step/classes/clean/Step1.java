@@ -52,6 +52,6 @@ public class Step1 {
     public void then3(@Named("symbol") String symbol) {
         printMethodName();
         System.out.println(symbol);
-        Assert.fail("Simple");
+//        Assert.fail("Simple");
     }
 }

@@ -1,5 +1,5 @@
 
-Scenario: S1
+Scenario: Verify login screen buttons and labels. Fetch details from database
 
 Meta:
 @Scenario1

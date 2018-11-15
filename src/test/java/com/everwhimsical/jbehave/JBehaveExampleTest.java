@@ -4,7 +4,6 @@ import com.everwhimsical.jbehave.execution.ExecutionModelReporter;
 import com.everwhimsical.jbehave.execution.JBehaveExecution;
 import com.everwhimsical.jbehave.model.About;
 import com.everwhimsical.jbehave.step.classes.clean.Step1;
-import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.IOException;
@@ -36,7 +35,7 @@ public class JBehaveExampleTest extends JUnitStory {
     public void teardown() throws IOException {
         JBehaveExecution.endExecution();
         ReportBuilder.buildSlingshotV1Report();
-        System.out.println(GSON_PRETTY.toJson(JBehaveExecution.getExecution()));
+//        System.out.println(GSON_PRETTY.toJson(JBehaveExecution.getExecution()));
     }
 
     @Override
