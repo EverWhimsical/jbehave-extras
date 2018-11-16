@@ -34,7 +34,6 @@ deploy:
     condition: $is_release_candidate = 1
   name: JBehave Extras - $project_version
   body: Automatic JBehave Extras development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
-  prerelease: true
   overwrite: true
 ## Build and release to maven central
 - provider: script
